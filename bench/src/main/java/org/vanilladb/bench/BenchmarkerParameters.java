@@ -22,6 +22,7 @@ public class BenchmarkerParameters {
 	public static final long WARM_UP_INTERVAL;
 	public static final long BENCHMARK_INTERVAL;
 	public static final int NUM_RTES;
+	public static final double READ_WRITE_TX_RATE;
 	
 	public static final String SERVER_IP;
 	
@@ -42,6 +43,9 @@ public class BenchmarkerParameters {
 		
 		SERVER_IP = BenchProperties.getLoader().getPropertyAsString(
 				BenchmarkerParameters.class.getName() + ".SERVER_IP", "127.0.0.1");
+		
+		READ_WRITE_TX_RATE = BenchProperties.getLoader().getPropertyAsDouble(
+				BenchmarkerParameters.class.getName() + ".READ_WRITE_TX_RATE", 0.3);
 		
 		int conMode = BenchProperties.getLoader().getPropertyAsInteger(
 				BenchmarkerParameters.class.getName() + ".CONNECTION_MODE", 1);

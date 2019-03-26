@@ -52,7 +52,6 @@ public class UpdatePriceJdbcJob implements JdbcJob{
 			Statement statement = conn.createStatement();
 			ResultSet rs = null;
 			for (int i = 0; i < 10; i++) {
-				int rs2 = 0;
 				int price;
 				String updateSql;
 				String sql = "SELECT i_name, i_price FROM item WHERE i_id = " + itemIds[i];
@@ -68,11 +67,10 @@ public class UpdatePriceJdbcJob implements JdbcJob{
 				}else{	
 					updateSql = "UPDATE item SET i_price = ADD(i_price, " + addValues[i] + " ) WHERE i_id = " + itemIds[i] ;
 				}
-				rs2 = statement.executeUpdate(updateSql);
+				int rs2 = statement.executeUpdate(updateSql);
 			}
 			conn.commit();
 			
-			outputMsg.deleteCharAt(outputMsg.length() - 2);
 			outputMsg.append("]");
 			
 			return new VanillaDbJdbcResultSet(true, outputMsg.toString());
