@@ -19,6 +19,7 @@ import org.vanilladb.bench.StatisticMgr;
 import org.vanilladb.bench.benchmarks.as2.As2BenchTxnType;
 import org.vanilladb.bench.remote.SutConnection;
 import org.vanilladb.bench.rte.RemoteTerminalEmulator;
+import org.vanilladb.bench.util.RandomValueGenerator;
 
 public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
 	
@@ -30,7 +31,12 @@ public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
 	}
 	
 	protected As2BenchTxnType getNextTxType() {
-		return As2BenchTxnType.READ_ITEM;
+		RandomValueGenerator rvg = new RandomValueGenerator();
+		int num = rvg.number(0, 4);
+		if(num < 2)
+			return As2BenchTxnType.READ_ITEM;
+		else
+			return As2BenchTxnType.UPDATEPRICE;
 	}
 	
 	protected As2BenchTxExecutor getTxExeutor(As2BenchTxnType type) {
