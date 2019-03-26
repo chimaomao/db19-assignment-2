@@ -34,7 +34,7 @@ public enum As2BenchTxnType implements TransactionType {
 	}
 	
 	public boolean isBenchmarkingTx() {
-		if (this == READ_ITEM)
+		if (this == READ_ITEM || this == UPDATEPRICE)
 			return true;
 		return false;
 	}

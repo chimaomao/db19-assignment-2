@@ -13,7 +13,7 @@ public class UpdatePriceParamGen implements TxParamGenerator<As2BenchTxnType> {
 	
 	@Override
 	public As2BenchTxnType getTxnType() {
-		return As2BenchTxnType.READ_ITEM;
+		return As2BenchTxnType.UPDATEPRICE;
 	}
 
 	@Override

@@ -27,16 +27,17 @@ public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
 
 	public As2BenchRte(SutConnection conn, StatisticMgr statMgr) {
 		super(conn, statMgr);
-		executor = new As2BenchTxExecutor(new As2ReadItemParamGen());
+//		executor = new As2BenchTxExecutor(new As2ReadItemParamGen());
+		executor = new As2BenchTxExecutor(new UpdatePriceParamGen());
 	}
 	
 	protected As2BenchTxnType getNextTxType() {
-		RandomValueGenerator rvg = new RandomValueGenerator();
-		int num = rvg.number(0, 4);
-		if(num < 2)
-			return As2BenchTxnType.READ_ITEM;
-		else
-			return As2BenchTxnType.UPDATEPRICE;
+//		RandomValueGenerator rvg = new RandomValueGenerator();
+//		int num = rvg.number(0, 4);
+//		if(num < 2)
+//		return As2BenchTxnType.READ_ITEM;
+//		else
+		return As2BenchTxnType.UPDATEPRICE;
 	}
 	
 	protected As2BenchTxExecutor getTxExeutor(As2BenchTxnType type) {

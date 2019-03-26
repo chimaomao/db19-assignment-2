@@ -62,6 +62,7 @@ public abstract class RemoteTerminalEmulator<T extends TransactionType> extends 
 
 	private TxnResultSet executeTxnCycle(SutConnection conn) {
 		T txType = getNextTxType();
+//		System.out.println(txType.toString());
 		TransactionExecutor<T> executor = getTxExeutor(txType);
 		return executor.execute(conn);
 	}
