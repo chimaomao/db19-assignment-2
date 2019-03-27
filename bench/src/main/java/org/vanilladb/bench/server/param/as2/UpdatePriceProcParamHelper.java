@@ -1,5 +1,4 @@
 /*******************************************************************************
- * Copyright 2016, 2018 vanilladb.org contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +66,7 @@ public class UpdatePriceProcParamHelper extends StoredProcedureParamHelper {
 		readItemId = new int[readCount];
 		itemName = new String[readCount];
 		itemPrice = new double[readCount];
+		addVal = new int[readCount];
 
 		for (int i = 0; i < readCount; i++)
 			readItemId[i] = (Integer) pars[indexCnt++];
