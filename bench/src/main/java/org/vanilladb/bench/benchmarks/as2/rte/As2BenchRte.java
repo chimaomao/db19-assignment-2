@@ -20,7 +20,6 @@ import org.vanilladb.bench.benchmarks.as2.As2BenchTxnType;
 import org.vanilladb.bench.remote.SutConnection;
 import org.vanilladb.bench.rte.RemoteTerminalEmulator;
 import org.vanilladb.bench.util.RandomValueGenerator;
-import java.util.concurrent.ThreadLocalRandom;
 import org.vanilladb.bench.BenchmarkerParameters;
 
 public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
@@ -33,7 +32,8 @@ public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
 	}
 	
 	protected As2BenchTxnType getNextTxType() {
-		if(ThreadLocalRandom.current().nextDouble(0.0, 1.0) > BenchmarkerParameters.READ_WRITE_TX_RATE)
+		RandomValueGenerator rvg = new RandomValueGenerator();
+		if(rvg.randomDoubleIncrRange(0, 1, 0.1) > BenchmarkerParameters.READ_WRITE_TX_RATE)
 		{
 			return As2BenchTxnType.READ_ITEM;
 		}else {
