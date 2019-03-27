@@ -40,14 +40,14 @@ public class UpdatePriceProc extends BasicStoredProcedure<UpdatePriceProcParamHe
 				String name = (String) s.getVal("i_name").asJavaVal();
 				double price = (Double) s.getVal("i_price").asJavaVal();
 				
-//				String updateSql;
-//				if(price > As2BenchConstants.MAX_PRICE)
-//				{
-//					updateSql = "UPDATE item SET i_price = " + As2BenchConstants.MIN_PRICE  + " WHERE i_id = " + paramHelper.getReadItemId(idx); 
-//				}else {
-//					updateSql = "UPDATE item SET i_price = ADD(i_price," + paramHelper.getAddVal(idx) + " ) WHERE i_id = " + paramHelper.getReadItemId(idx) ;
-//				}
-//				executeUpdate(updateSql);
+				String updateSql;
+				if(price > As2BenchConstants.MAX_PRICE)
+				{
+					updateSql = "UPDATE item SET i_price = " + As2BenchConstants.MIN_PRICE  + " WHERE i_id = " + paramHelper.getReadItemId(idx); 
+				}else {
+					updateSql = "UPDATE item SET i_price = ADD(i_price," + paramHelper.getAddVal(idx) + " ) WHERE i_id = " + paramHelper.getReadItemId(idx) ;
+				}
+				VanillaDb.newPlanner().executeUpdate(updateSql, tx);
 				
 				paramHelper.setItemName(name, idx);
 				paramHelper.setItemPrice(price, idx);
