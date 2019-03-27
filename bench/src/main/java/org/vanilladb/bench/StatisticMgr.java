@@ -110,6 +110,7 @@ public class StatisticMgr {
 				fileName += "-" + fileNamePostfix; // E.g. "20180524-200824-postfix"
 			
 			outputDetailReport(fileName);
+			outputAnotherReport(fileName);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -166,6 +167,22 @@ public class StatisticMgr {
 			} else {
 				writer.write("TOTAL 0 avg latency: 0 ms");
 			}
+		}
+	}
+	
+	private void outputAnotherReport(String fileName) throws IOException {
+		HashMap<TransactionType, TxnStatistic> txnStatistics = new HashMap<TransactionType, TxnStatistic>();
+		
+		for (TransactionType type : allTxTypes)
+			txnStatistics.put(type, new TxnStatistic(type));
+		
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(OUTPUT_DIR, fileName + ".csv")))) {
+			// First line: total transaction count
+			writer.write("time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)");
+			writer.newLine();
+			
+			
+			
 		}
 	}
 }
