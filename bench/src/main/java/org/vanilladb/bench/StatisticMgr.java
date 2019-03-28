@@ -183,12 +183,12 @@ public class StatisticMgr {
 				writer.newLine();
 
 				ArrayList <Double> timeOfRteInFiveSec = new ArrayList<Double>();
+				double leftTime = 5000.0;
 				
-				int	totalSec = 0;
+				int	totalSec = 5;
 				for (TxnResultSet resultSet : resultSets) {
 					double latency = TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime());
 					timeOfRteInFiveSec.add(latency);
-					double leftTime = 5000.0;
 					leftTime -= latency;
 					if(leftTime <= 0.0  )
 					{
@@ -203,13 +203,15 @@ public class StatisticMgr {
 								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/4),
 								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/2),
 								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()*3/4)
-							    ));
-						totalSec =totalSec+ 5;
+						));
+						totalSec = totalSec + 5;
 						timeOfRteInFiveSec.clear();
+						leftTime = 5000.0;
 					
 					}
 				} 
 
 			}
-		}	
+		
+	}	
 }
