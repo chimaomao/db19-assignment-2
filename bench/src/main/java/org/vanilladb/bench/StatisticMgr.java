@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.Collections;
 import org.vanilladb.bench.util.BenchProperties;
 
 public class StatisticMgr {
@@ -176,13 +176,40 @@ public class StatisticMgr {
 		for (TransactionType type : allTxTypes)
 			txnStatistics.put(type, new TxnStatistic(type));
 		
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(OUTPUT_DIR, fileName + ".csv")))) {
-			// First line: total transaction count
-			writer.write("time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)");
-			writer.newLine();
-			
-			
-			
-		}
-	}
+
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(OUTPUT_DIR, fileName + ".csv")))) {
+				// First line: total transaction count
+				writer.write("time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)");
+				writer.newLine();
+
+				ArrayList <Double> timeOfRteInFiveSec = new ArrayList<Double>();
+				
+				int	totalSec = 0;
+				for (TxnResultSet resultSet : resultSets) {
+					double latency = TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime());
+					timeOfRteInFiveSec.add(latency);
+					double leftTime = 5000.0;
+					leftTime -= latency;
+					if(leftTime <= 0.0  )
+					{
+						Collections.sort(timeOfRteInFiveSec);
+					
+						writer.write(String.format("%d,%d,%f,%f,%f,%f,%f,%f\n",
+								totalSec,
+								timeOfRteInFiveSec.size(),
+								(5000.0-leftTime)/timeOfRteInFiveSec.size(),
+								Collections.min(timeOfRteInFiveSec),
+								Collections.max(timeOfRteInFiveSec),
+								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/4),
+								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/2),
+								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()*3/4)
+							    ));
+						totalSec =totalSec+ 5;
+						timeOfRteInFiveSec.clear();
+					
+					}
+				} 
+
+			}
+		}	
 }

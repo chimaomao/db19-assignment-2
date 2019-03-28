@@ -47,7 +47,7 @@ public class UpdatePriceProc extends BasicStoredProcedure<UpdatePriceProcParamHe
 				}else {
 					updateSql = "UPDATE item SET i_price = ADD(i_price," + paramHelper.getAddVal(idx) + " ) WHERE i_id = " + paramHelper.getReadItemId(idx) ;
 				}
-				VanillaDb.newPlanner().executeUpdate(updateSql, tx);
+				int pp = VanillaDb.newPlanner().executeUpdate(updateSql, tx);
 				
 				paramHelper.setItemName(name, idx);
 				paramHelper.setItemPrice(price, idx);
