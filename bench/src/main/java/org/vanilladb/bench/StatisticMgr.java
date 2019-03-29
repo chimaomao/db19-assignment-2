@@ -31,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Collections;
+
+import org.vanilladb.bench.benchmarks.as2.As2BenchConstants;
 import org.vanilladb.bench.util.BenchProperties;
 
 public class StatisticMgr {
@@ -182,7 +184,9 @@ public class StatisticMgr {
 			writer.newLine();
 
 			ArrayList <Double> timeOfRteInFiveSec = new ArrayList<Double>();
-			double leftTime = 5000.0;
+			double left = 5000.0 * BenchProperties.getLoader().getPropertyAsInteger(
+					As2BenchConstants.class.getName() + ".RTES", 10) ;
+			double leftTime = left;
 			
 			int	totalSec = 5;
 			for (TxnResultSet resultSet : resultSets) {
@@ -209,7 +213,7 @@ public class StatisticMgr {
 					writer.newLine();
 					totalSec = totalSec + 5;
 					timeOfRteInFiveSec.clear();
-					leftTime = 5000.0;
+					leftTime = left;
 				
 				}
 			} 
