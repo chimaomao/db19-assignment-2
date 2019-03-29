@@ -33,7 +33,8 @@ public class As2BenchRte extends RemoteTerminalEmulator<As2BenchTxnType> {
 	
 	protected As2BenchTxnType getNextTxType() {
 		RandomValueGenerator rvg = new RandomValueGenerator();
-		if(rvg.randomDoubleIncrRange(0, 1, 0.1) > BenchmarkerParameters.READ_WRITE_TX_RATE)
+		double ram = rvg.randomDoubleIncrRange(0, 0.9, 0.1);
+		if(ram >= BenchmarkerParameters.READ_WRITE_TX_RATE  )
 		{
 			return As2BenchTxnType.READ_ITEM;
 		}else {
