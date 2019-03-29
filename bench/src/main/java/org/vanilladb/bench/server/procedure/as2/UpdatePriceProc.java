@@ -41,16 +41,18 @@ public class UpdatePriceProc extends BasicStoredProcedure<UpdatePriceProcParamHe
 				double price = (Double) s.getVal("i_price").asJavaVal();
 				
 				String updateSql;
-				if(price > As2BenchConstants.MAX_PRICE)
-				{
+				if(price > As2BenchConstants.MAX_PRICE){
 					updateSql = "UPDATE item SET i_price = " + As2BenchConstants.MIN_PRICE  + " WHERE i_id = " + paramHelper.getReadItemId(idx); 
+					if(VanillaDb.newPlanner().executeUpdate(updateSql, tx) > 0)
+						paramHelper.setItemPrice(As2BenchConstants.MAX_PRICE, idx);
 				}else {
 					updateSql = "UPDATE item SET i_price = ADD(i_price," + paramHelper.getAddVal(idx) + " ) WHERE i_id = " + paramHelper.getReadItemId(idx) ;
+					if(VanillaDb.newPlanner().executeUpdate(updateSql, tx) > 0)
+						paramHelper.setItemPrice(price+paramHelper.getAddVal(idx), idx);
 				}
-				int pp = VanillaDb.newPlanner().executeUpdate(updateSql, tx);
 				
 				paramHelper.setItemName(name, idx);
-				paramHelper.setItemPrice(price, idx);
+				
 			} else
 				throw new RuntimeException("Cloud not find item record with i_id = " + iid);
 
