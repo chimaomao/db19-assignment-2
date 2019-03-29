@@ -177,41 +177,44 @@ public class StatisticMgr {
 			txnStatistics.put(type, new TxnStatistic(type));
 		
 
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(OUTPUT_DIR, fileName + ".csv")))) {
-				// First line: total transaction count
-				writer.write("time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)");
-				writer.newLine();
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(OUTPUT_DIR, fileName + ".csv")))) {
+			writer.write("time(sec), throughput(txs), avg_latency(ms), min(ms), max(ms), 25th_lat(ms), median_lat(ms), 75th_lat(ms)");
+			writer.newLine();
 
-				ArrayList <Double> timeOfRteInFiveSec = new ArrayList<Double>();
-				double leftTime = 5000.0;
+			ArrayList <Double> timeOfRteInFiveSec = new ArrayList<Double>();
+			double leftTime = 5000.0;
+			
+			int	totalSec = 5;
+			for (TxnResultSet resultSet : resultSets) {
+				double txnTime = TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime());
+				timeOfRteInFiveSec.add(txnTime);
+				leftTime -= txnTime;
+				if(leftTime <= 0.0)
+				{
+					int numOfTxn = timeOfRteInFiveSec.size();
+					Collections.sort(timeOfRteInFiveSec);
+					
+					
+					writer.write(String.format("%d,%d,%f,%f,%f,%f,%f,%f",
+							totalSec,
+							numOfTxn,
+							(5000.0-leftTime)/numOfTxn,
+							Collections.min(timeOfRteInFiveSec),
+							Collections.max(timeOfRteInFiveSec),
+							timeOfRteInFiveSec.get(numOfTxn/4),
+							timeOfRteInFiveSec.get(numOfTxn/2),
+							timeOfRteInFiveSec.get(numOfTxn*3/4)
+							)
+					);
+					writer.newLine();
+					totalSec = totalSec + 5;
+					timeOfRteInFiveSec.clear();
+					leftTime = 5000.0;
 				
-				int	totalSec = 5;
-				for (TxnResultSet resultSet : resultSets) {
-					double latency = TimeUnit.NANOSECONDS.toMillis(resultSet.getTxnResponseTime());
-					timeOfRteInFiveSec.add(latency);
-					leftTime -= latency;
-					if(leftTime <= 0.0  )
-					{
-						Collections.sort(timeOfRteInFiveSec);
-					
-						writer.write(String.format("%d,%d,%f,%f,%f,%f,%f,%f\n",
-								totalSec,
-								timeOfRteInFiveSec.size(),
-								(5000.0-leftTime)/timeOfRteInFiveSec.size(),
-								Collections.min(timeOfRteInFiveSec),
-								Collections.max(timeOfRteInFiveSec),
-								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/4),
-								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()/2),
-								timeOfRteInFiveSec.get(timeOfRteInFiveSec.size()*3/4)
-						));
-						totalSec = totalSec + 5;
-						timeOfRteInFiveSec.clear();
-						leftTime = 5000.0;
-					
-					}
-				} 
+				}
+			} 
 
-			}
+		}
 		
 	}	
 }
